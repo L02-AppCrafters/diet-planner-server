@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,6 +20,42 @@ export class User {
 
   @Column({ name: 'refresh_token', nullable: true, type: 'text' })
   refreshToken: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  name: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  picture: string | null;
+
+  @Column({ name: 'subscription_id', type: 'varchar', nullable: true })
+  subscriptionId: string | null;
+
+  @Column({ type: 'int', default: 0 })
+  credit: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  height: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  weight: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  gender: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  goal: string | null;
+
+  @Column({ type: 'int', nullable: true })
+  calories: number | null;
+
+  @Column({ type: 'int', nullable: true })
+  proteins: number | null;
+
+  @OneToMany('Recipe', 'user')
+  recipes: any[];
+
+  @OneToMany('MealPlan', 'user')
+  mealPlans: any[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

@@ -15,9 +15,10 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Example API')
-    .setDescription('The Example API description')
+    .setTitle('Nutri Planner API')
+    .setDescription('REST API for the Nutri Planner mobile application')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
