@@ -18,11 +18,6 @@ import { User } from './users/entities/user.entity';
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        host: configService.get('DATABASE_HOST', 'localhost'),
-        port: configService.get<number>('DATABASE_PORT', 5432),
-        username: configService.get('DATABASE_USER', 'postgres'),
-        password: configService.get('DATABASE_PASSWORD', 'postgres'),
-        database: configService.get('DATABASE_NAME', 'diet_planner'),
         entities: [User],
         synchronize: configService.get('NODE_ENV') !== 'production',
         logging: configService.get('NODE_ENV') === 'development',
