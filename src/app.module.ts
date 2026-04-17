@@ -17,6 +17,7 @@ import { User } from './users/entities/user.entity';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
         type: 'postgres',
+        url: configService.get('DATABASE_URL'),
         host: configService.get('DATABASE_HOST', 'localhost'),
         port: configService.get<number>('DATABASE_PORT', 5432),
         username: configService.get('DATABASE_USER', 'postgres'),
