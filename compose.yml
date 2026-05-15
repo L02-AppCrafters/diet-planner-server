@@ -1,6 +1,18 @@
 services:
+  app:
+    build: .
+    container_name: diet-planner-app
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-postgres}@${DATABASE_HOST:-postgres}/${DATABASE_NAME:-diet_planner}
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+
   postgres:
-    image: postgres:17-alpine
+    image: postgres:17
     container_name: diet-planner-postgres
     restart: unless-stopped
     env_file:
@@ -10,7 +22,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-postgres}
       POSTGRES_DB: ${DATABASE_NAME:-diet_planner}
     ports:
-      - "${DATABASE_PORT:-5432}:5432"
+      - '${DATABASE_PORT:-5432}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
