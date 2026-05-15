@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +13,7 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { ShoppingListsModule } from './shopping-lists/shopping-lists.module';
 import { DailyLogsModule } from './daily-logs/daily-logs.module';
 import { FoodNutritionModule } from './food-nutrition/food-nutrition.module';
+import { HealthModule } from './health/health.module';
 import { User } from './users/entities/user.entity';
 import { Recipe } from './recipes/entities/recipe.entity';
 import { MealPlan } from './meal-plans/entities/meal-plan.entity';
@@ -26,6 +28,7 @@ import { FoodNutrition } from './food-nutrition/entities/food-nutrition.entity';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
@@ -55,6 +58,7 @@ import { FoodNutrition } from './food-nutrition/entities/food-nutrition.entity';
     ShoppingListsModule,
     DailyLogsModule,
     FoodNutritionModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
