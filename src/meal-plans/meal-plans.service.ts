@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MealPlan } from './entities/meal-plan.entity';
@@ -13,6 +13,13 @@ export class MealPlansService {
   ) {}
 
   async create(uid: string, dto: CreateMealPlanDto): Promise<MealPlan> {
+    const hasRecipe = !!dto.recipeId;
+    const hasFood = !!dto.foodNutritionId;
+    if (hasRecipe === hasFood) {
+      throw new BadRequestException(
+        'Provide exactly one of recipeId or foodNutritionId',
+      );
+    }
     const mealPlan = this.mealPlanRepository.create({ ...dto, uid });
     return this.mealPlanRepository.save(mealPlan);
   }
@@ -20,11 +27,15 @@ export class MealPlansService {
   async findAll(uid: string, date?: string): Promise<MealPlan[]> {
     return this.mealPlanRepository.find({
       where: { uid, ...(date && { date }) },
+      relations: ['recipe', 'foodNutrition'],
     });
   }
 
   async findOne(id: string, uid: string): Promise<MealPlan> {
-    const mealPlan = await this.mealPlanRepository.findOne({ where: { id, uid } });
+    const mealPlan = await this.mealPlanRepository.findOne({
+      where: { id, uid },
+      relations: ['recipe', 'foodNutrition'],
+    });
     if (!mealPlan) throw new NotFoundException('Meal plan not found');
     return mealPlan;
   }

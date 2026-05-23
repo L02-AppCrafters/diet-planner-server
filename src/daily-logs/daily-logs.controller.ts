@@ -40,6 +40,24 @@ export class DailyLogsController {
     return null;
   }
 
+  @Get('weight-history')
+  @ApiOperation({
+    summary: 'Get weight history from daily logs (entries with currentWeight)',
+  })
+  @ApiQuery({ name: 'from', required: false, example: '2026-04-01' })
+  @ApiQuery({ name: 'to', required: false, example: '2026-05-15' })
+  @ApiResponse({
+    status: 200,
+    description: 'Array of { logDate, currentWeight } ordered by date ASC',
+  })
+  async weightHistory(
+    @CurrentUser() user: User,
+    @Query('from') from?: string,
+    @Query('to') to?: string,
+  ) {
+    return this.dailyLogsService.getWeightHistory(user.id, from, to);
+  }
+
   @Put()
   @ApiOperation({ summary: 'Create or update daily log (upsert by date)' })
   @ApiResponse({ status: 200, description: 'Log upserted' })

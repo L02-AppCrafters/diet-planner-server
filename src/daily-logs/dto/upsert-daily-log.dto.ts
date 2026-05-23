@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
+import { IsDateString, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class UpsertDailyLogDto {
   @ApiProperty({ example: '2026-05-15' })
@@ -36,6 +36,12 @@ export class UpsertDailyLogDto {
   @Min(0)
   @IsOptional()
   waterMl?: number;
+
+  @ApiPropertyOptional({ example: 70.5, description: 'Current weight in kg' })
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  currentWeight?: number;
 
   @ApiPropertyOptional({ example: 'Felt good today' })
   @IsString()

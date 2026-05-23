@@ -41,6 +41,15 @@ export class DailyLog {
   @Column({ name: 'water_ml', type: 'int', default: 0 })
   waterMl: number;
 
+  @Column({
+    name: 'current_weight',
+    type: 'numeric',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+  })
+  currentWeight: number | null;
+
   @Column({ type: 'text', nullable: true })
   notes: string;
 

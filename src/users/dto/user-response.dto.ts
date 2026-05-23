@@ -37,6 +37,21 @@ export class UserResponseDto {
   @ApiPropertyOptional({ example: 150 })
   proteins: number | null;
 
+  @ApiPropertyOptional({ example: 28 })
+  age: number | null;
+
+  @ApiPropertyOptional({
+    example: 'active',
+    enum: ['sedentary', 'light', 'active', 'elite'],
+  })
+  activityLevel: string | null;
+
+  @ApiPropertyOptional({ example: 200 })
+  carbsGoal: number | null;
+
+  @ApiPropertyOptional({ example: 60 })
+  fatsGoal: number | null;
+
   @ApiProperty()
   createdAt: Date;
 

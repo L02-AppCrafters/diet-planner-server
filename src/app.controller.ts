@@ -9,4 +9,9 @@ export class AppController {
   healthCheck(): { status: string; timestamp: string } {
     return { status: 'ok', timestamp: new Date().toISOString() };
   }
+
+  @Get('health')
+  getHealth(): { status: string } {
+    return { status: 'ok' };
+  }
 }

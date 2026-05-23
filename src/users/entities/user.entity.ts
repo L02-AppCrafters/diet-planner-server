@@ -51,6 +51,18 @@ export class User {
   @Column({ type: 'int', nullable: true })
   proteins: number | null;
 
+  @Column({ type: 'int', nullable: true })
+  age: number | null;
+
+  @Column({ name: 'activity_level', type: 'varchar', nullable: true })
+  activityLevel: string | null;
+
+  @Column({ name: 'carbs_goal', type: 'int', nullable: true })
+  carbsGoal: number | null;
+
+  @Column({ name: 'fats_goal', type: 'int', nullable: true })
+  fatsGoal: number | null;
+
   @OneToMany('Recipe', 'user')
   recipes: any[];
 
