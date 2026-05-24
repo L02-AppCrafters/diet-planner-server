@@ -406,7 +406,7 @@ async function seed() {
 }
 
 function createRecipeImageUrl(fileName: string) {
-  const baseUrl = process.env.PUBLIC_ASSET_BASE_URL ?? 'http://10.0.2.2:4000';
+  const baseUrl = process.env.PUBLIC_ASSET_BASE_URL ?? `http://localhost:${process.env.PORT ?? 4000}`;
   return `${baseUrl.replace(/\/$/, '')}/recipes/${fileName}`;
 }
 

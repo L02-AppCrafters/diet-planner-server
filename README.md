@@ -31,11 +31,9 @@
 $ npm install
 ```
 
-## Run seed database
+## Create database
 
-```
-npm run seed:recipes
-```
+- Create a new PostgresSQL database: `diet_planner`
 
 ## Compile and run the project
 
@@ -48,6 +46,12 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+```
+
+## Run database seeds to generate sample recipes
+
+```
+npm run seed:recipes
 ```
 
 ## Run tests
