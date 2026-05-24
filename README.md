@@ -31,6 +31,12 @@
 $ npm install
 ```
 
+## Run seed database
+
+```
+npm run seed:recipes
+```
+
 ## Compile and run the project
 
 ```bash

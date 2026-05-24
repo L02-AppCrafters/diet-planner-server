@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { MealPlan } from './entities/meal-plan.entity';
 import { CreateMealPlanDto } from './dto/create-meal-plan.dto';
 import { UpdateMealPlanDto } from './dto/update-meal-plan.dto';
@@ -24,10 +24,13 @@ export class MealPlansService {
     return this.mealPlanRepository.save(mealPlan);
   }
 
-  async findAll(uid: string, date?: string): Promise<MealPlan[]> {
+  async findAll(uid: string, date?: string, startDate?: string, endDate?: string): Promise<MealPlan[]> {
+    const dateFilter = date ? date : startDate && endDate ? Between(startDate, endDate) : undefined;
+
     return this.mealPlanRepository.find({
-      where: { uid, ...(date && { date }) },
+      where: { uid, ...(dateFilter && { date: dateFilter }) },
       relations: ['recipe', 'foodNutrition'],
+      order: { createdAt: 'DESC' },
     });
   }
 

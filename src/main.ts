@@ -2,11 +2,18 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.setGlobalPrefix('api', { exclude: ['health'] });
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
+  app.useStaticAssets(join(process.cwd(), 'public'));
 
   app.useGlobalPipes(
     new ValidationPipe({

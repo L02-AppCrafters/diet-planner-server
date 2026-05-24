@@ -1,7 +1,7 @@
 # Diet Planner API — FE Integration Reference
 
-> **Base URL**: `http://localhost:3000` (dev) — replace with hosted URL in production  
-> **API Docs (Swagger)**: `{BASE_URL}/api`  
+> **Base URL**: `http://localhost:3000/api` (dev) — replace with hosted URL in production  
+> **API Docs (Swagger)**: `http://localhost:3000/api`  
 > **Stack**: NestJS REST API · JWT Bearer auth · PostgreSQL
 
 ---

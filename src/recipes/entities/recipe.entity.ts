@@ -23,12 +23,15 @@ export class Recipe {
   @Column({ name: 'recipe_name', type: 'jsonb' })
   recipeName: any;
 
-  @Column({ name: 'uid', type: 'uuid' })
-  uid: string;
+  @Column({ name: 'uid', type: 'uuid', nullable: true })
+  uid: string | null;
 
-  @ManyToOne(() => User, 'recipes', { onDelete: 'CASCADE' })
+  @Column({ name: 'is_default', type: 'boolean', default: false })
+  isDefault: boolean;
+
+  @ManyToOne(() => User, 'recipes', { nullable: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'uid' })
-  user: User;
+  user: User | null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
