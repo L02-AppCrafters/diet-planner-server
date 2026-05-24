@@ -4,12 +4,15 @@ import { Between, Repository } from 'typeorm';
 import { MealPlan } from './entities/meal-plan.entity';
 import { CreateMealPlanDto } from './dto/create-meal-plan.dto';
 import { UpdateMealPlanDto } from './dto/update-meal-plan.dto';
+import { Recipe } from '../recipes/entities/recipe.entity';
 
 @Injectable()
 export class MealPlansService {
   constructor(
     @InjectRepository(MealPlan)
     private readonly mealPlanRepository: Repository<MealPlan>,
+    @InjectRepository(Recipe)
+    private readonly recipeRepository: Repository<Recipe>,
   ) {}
 
   async create(uid: string, dto: CreateMealPlanDto): Promise<MealPlan> {
@@ -20,7 +23,26 @@ export class MealPlansService {
         'Provide exactly one of recipeId or foodNutritionId',
       );
     }
-    const mealPlan = this.mealPlanRepository.create({ ...dto, uid });
+    const recipe = dto.recipeId
+      ? await this.recipeRepository.findOne({
+          where: [
+            { id: dto.recipeId, isDefault: true },
+            { id: dto.recipeId, uid },
+          ],
+        })
+      : null;
+
+    if (dto.recipeId && !recipe) {
+      throw new BadRequestException('Recipe not found');
+    }
+
+    const mealPlan = this.mealPlanRepository.create({
+      ...dto,
+      snapshotImageUrl: recipe?.imageUrl ?? null,
+      snapshotJsonData: recipe?.jsonData ?? null,
+      snapshotRecipeName: recipe?.recipeName ?? null,
+      uid,
+    });
     return this.mealPlanRepository.save(mealPlan);
   }
 

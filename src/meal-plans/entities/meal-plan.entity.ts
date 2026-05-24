@@ -19,7 +19,7 @@ export class MealPlan {
   @Column({ name: 'recipe_id', type: 'uuid', nullable: true })
   recipeId: string | null;
 
-  @ManyToOne(() => Recipe, { onDelete: 'CASCADE', nullable: true })
+  @ManyToOne(() => Recipe, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'recipe_id' })
   recipe: Recipe | null;
 
@@ -43,6 +43,15 @@ export class MealPlan {
 
   @Column({ name: 'meal_type', type: 'varchar' })
   mealType: string;
+
+  @Column({ name: 'snapshot_recipe_name', type: 'jsonb', nullable: true })
+  snapshotRecipeName: any | null;
+
+  @Column({ name: 'snapshot_json_data', type: 'jsonb', nullable: true })
+  snapshotJsonData: Record<string, any> | null;
+
+  @Column({ name: 'snapshot_image_url', type: 'text', nullable: true })
+  snapshotImageUrl: string | null;
 
   @Column({ name: 'uid', type: 'uuid' })
   uid: string;
