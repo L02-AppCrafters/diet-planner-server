@@ -50,13 +50,17 @@ export class MealPlansController {
   @Get()
   @ApiOperation({ summary: 'Get all meal plans for current user' })
   @ApiQuery({ name: 'date', required: false, description: 'Filter by date (YYYY-MM-DD)', example: '2026-04-17' })
+  @ApiQuery({ name: 'startDate', required: false, description: 'Range start date (YYYY-MM-DD)', example: '2026-04-14' })
+  @ApiQuery({ name: 'endDate', required: false, description: 'Range end date (YYYY-MM-DD)', example: '2026-04-20' })
   @ApiResponse({ status: 200, description: 'List of meal plans' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll(
     @CurrentUser() user: User,
     @Query('date') date?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
   ): Promise<MealPlan[]> {
-    return this.mealPlansService.findAll(user.id, date);
+    return this.mealPlansService.findAll(user.id, date, startDate, endDate);
   }
 
   @Get(':id')

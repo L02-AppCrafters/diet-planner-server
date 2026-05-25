@@ -13,28 +13,44 @@ export class RecipesService {
   ) {}
 
   async create(uid: string, dto: CreateRecipeDto): Promise<Recipe> {
-    const recipe = this.recipeRepository.create({ ...dto, uid });
+    const recipe = this.recipeRepository.create({ ...dto, isDefault: false, uid });
     return this.recipeRepository.save(recipe);
   }
 
   async findAll(uid: string): Promise<Recipe[]> {
-    return this.recipeRepository.find({ where: { uid } });
+    return this.recipeRepository.find({
+      order: {
+        isDefault: 'DESC',
+        createdAt: 'DESC',
+      },
+      where: [
+        { isDefault: true },
+        { uid },
+      ],
+    });
   }
 
   async findOne(id: string, uid: string): Promise<Recipe> {
-    const recipe = await this.recipeRepository.findOne({ where: { id, uid } });
+    const recipe = await this.recipeRepository.findOne({
+      where: [
+        { id, isDefault: true },
+        { id, uid },
+      ],
+    });
     if (!recipe) throw new NotFoundException('Recipe not found');
     return recipe;
   }
 
   async update(id: string, uid: string, dto: UpdateRecipeDto): Promise<Recipe> {
-    const recipe = await this.findOne(id, uid);
+    const recipe = await this.recipeRepository.findOne({ where: { id, uid } });
+    if (!recipe) throw new NotFoundException('Recipe not found');
     Object.assign(recipe, dto);
     return this.recipeRepository.save(recipe);
   }
 
   async remove(id: string, uid: string): Promise<void> {
-    await this.findOne(id, uid);
+    const recipe = await this.recipeRepository.findOne({ where: { id, uid } });
+    if (!recipe) throw new NotFoundException('Recipe not found');
     await this.recipeRepository.delete(id);
   }
 }
