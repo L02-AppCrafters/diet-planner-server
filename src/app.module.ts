@@ -14,6 +14,7 @@ import { ShoppingListsModule } from './shopping-lists/shopping-lists.module';
 import { DailyLogsModule } from './daily-logs/daily-logs.module';
 import { FoodNutritionModule } from './food-nutrition/food-nutrition.module';
 import { HealthModule } from './health/health.module';
+import { AiModule } from './ai/ai.module';
 import { User } from './users/entities/user.entity';
 import { Recipe } from './recipes/entities/recipe.entity';
 import { MealPlan } from './meal-plans/entities/meal-plan.entity';
@@ -59,6 +60,7 @@ import { FoodNutrition } from './food-nutrition/entities/food-nutrition.entity';
     DailyLogsModule,
     FoodNutritionModule,
     HealthModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

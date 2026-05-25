@@ -13,6 +13,8 @@ async function bootstrap() {
     origin: true,
     credentials: true,
   });
+  app.useBodyParser('json', { limit: '10mb' });
+  app.useBodyParser('urlencoded', { extended: true, limit: '10mb' });
   app.useStaticAssets(join(process.cwd(), 'public'));
 
   app.useGlobalPipes(
