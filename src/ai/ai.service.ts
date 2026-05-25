@@ -1,5 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'crypto';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
 
 type RecognizedRecipe = {
   isRelevantFoodImage?: boolean;
@@ -90,6 +93,7 @@ isRelevantFoodImage(boolean), rejectionReason(string, optional), recipeName, des
     }
 
     return {
+      imageUrl: await this.persistImageAndGetUrl(imageBase64),
       recognized: parsed,
     };
   }
@@ -228,5 +232,27 @@ isRelevantFoodImage(boolean), rejectionReason(string, optional), recipeName, des
       return meal;
     }
     return 'snack';
+  }
+
+  private async persistImageAndGetUrl(imageBase64: string) {
+    const match = imageBase64.match(/^data:(image\/[a-zA-Z0-9+.-]+);base64,(.+)$/);
+    if (!match) {
+      return '';
+    }
+
+    const mimeType = match[1];
+    const base64Payload = match[2];
+    const extension = mimeType.includes('png') ? 'png' : 'jpg';
+    const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
+    const uploadDir = join(process.cwd(), 'public', 'recipes', 'uploads');
+    await mkdir(uploadDir, { recursive: true });
+    await writeFile(join(uploadDir, fileName), Buffer.from(base64Payload, 'base64'));
+
+    const publicBaseUrl =
+      this.configService.get<string>('PUBLIC_BASE_URL') ??
+      this.configService.get<string>('HEALTH_CHECK_URL')?.replace(/\/health\/?$/, '') ??
+      'http://localhost:4000';
+
+    return `${publicBaseUrl.replace(/\/$/, '')}/recipes/uploads/${fileName}`;
   }
 }
